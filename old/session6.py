@@ -31,6 +31,23 @@
 # print(t)
 
 
-print(4 % 2 == 0)
-print(4 / 2)
-print(4 // 2)
+# print(4 % 2 == 0)
+# print(4 / 2)
+# print(4 // 2)
+
+numbers = [1,2,3,4,5,6,7,8]
+for i in range(len(numbers)-1, -1, -1):
+    print(numbers[i])
+
+# for n in numbers:
+#     if n % 2 == 0:
+#         print(f"{n} is even")
+#     else:
+#         print(f"{n} is odd")
+
+
+# for i in range(len(numbers)):
+#     if numbers[i] % 2 == 0:
+#         print(f"{numbers[i]} is even")
+#     else:
+#         print(f"{numbers[i]} is odd")
