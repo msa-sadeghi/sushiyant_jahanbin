@@ -28,6 +28,29 @@ class Player(Sprite):
         self.direction = 1
         self.yspeed = 0
         self.is_grounded = False
+        self.is_sliding = False
+        self.slide_time = 0
+        self.slide_duration = 400
+        self.slide_speed = 15
+        self.slide_cooldown = 1000
+        self.last_slide_time = 0
+
+
+    def slide(self):
+        keys = pygame.key.get_pressed()
+        current_time = pygame.time.get_ticks()
+        can_slide = current_time - self.last_slide_time >= 1000
+
+        if keys[pygame.K_DOWN] and not self.is_sliding and self.is_grounded and can_slide:
+            self.is_sliding = True
+            self.slide_time = current_time
+            self.last_slide_time = current_time
+            self.switch_animation("Slide")
+
+        if self.is_sliding:
+            self.rect.x += self.slide_speed * self.direction
+            if pygame.time.get_ticks() - self.slide_time >= self.slide_duration:
+                self.is_sliding = False
 
     def animation(self):
         if pygame.time.get_ticks() - self.animation_time > 100:
@@ -42,9 +65,9 @@ class Player(Sprite):
         elif self.yspeed > 0 and not self.is_grounded:
             self.switch_animation("Fall")
 
-    def draw(self, screen):
+    def draw(self, screen, scroll_x):
         img = pygame.transform.flip(self.image, self.direction == -1, False)
-        screen.blit(img, self.rect)
+        screen.blit(img, (self.rect.x  - scroll_x, self.rect.y))
 
     def switch_animation(self, new_animation_name):
         if self.current_animation != new_animation_name:
@@ -54,6 +77,8 @@ class Player(Sprite):
         self.image = self.all_images[self.current_animation][self.frame_image]
 
     def move(self):
+        if self.is_sliding:
+            return
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] == True:
             self.direction = -1
@@ -67,6 +92,7 @@ class Player(Sprite):
             self.switch_animation("Idle")
         if keys[pygame.K_LEFT] and keys[pygame.K_RIGHT]:
             self.switch_animation("Idle")
+        
 
     def move_y(self):
         dy = 0
