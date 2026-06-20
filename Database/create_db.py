@@ -2,7 +2,10 @@ import sqlite3
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
+
 DB_NAME = "test.db"
+
+
 class UserApp:
     def __init__(self, root):
         self.root = root
@@ -29,10 +32,44 @@ class UserApp:
         self.tree.pack()
 
     def add_user(self):
+
         window = tk.Toplevel(self.root)
         window.title("Add User")
-        
 
+        window.geometry("300x220")
+
+        tk.Label(window, text="name").pack()
+
+        name_entry = tk.Entry(window)
+        name_entry.pack()
+
+        tk.Label(window, text="email").pack()
+
+        email_entry = tk.Entry(window)
+        email_entry.pack()
+
+        tk.Label(window, text="age").pack()
+
+        age_entry = tk.Entry(window)
+        age_entry.pack()
+
+      
+
+        def save():
+            name = name_entry.get()
+            email = name_entry.get()
+            age = name_entry.get()
+            conn = self.connect_db()
+            cursor = conn.cursor()
+            cursor.execute("INSERT INTO users(name, email, age) VALUES (?, ?, ?)", (name, email, age))
+
+            conn.commit()
+            user_id = cursor.lastrowid
+            conn.close()
+            self.tree.insert("", tk.END, values=(user_id, name, email, age))
+            window.distroy()
+
+        tk.Button(window, text="save", command=save).pack()
     def delete_user(self):
         pass
 
