@@ -67,7 +67,7 @@ class UserApp:
             user_id = cursor.lastrowid
             conn.close()
             self.tree.insert("", tk.END, values=(user_id, name, email, age))
-            window.distroy()
+            window.destroy()
 
         tk.Button(window, text="save", command=save).pack()
     def delete_user(self):
@@ -91,4 +91,5 @@ class UserApp:
 
 root = tk.Tk()
 app = UserApp(root)
+
 root.mainloop()
